@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-matrix-bg text-matrix-text font-mono antialiased;
+  }
+}
+
+@layer components {
+  .glass-panel {
+    @apply bg-matrix-surface backdrop-blur-md border border-matrix-border rounded-lg shadow-[0_0_15px_rgba(0,255,65,0.1)];
+  }
+  .matrix-btn {
+    @apply px-4 py-2 rounded font-semibold transition-all duration-200 border;
+  }
+  .matrix-btn-primary {
+    @apply bg-matrix-primary text-matrix-bg border-matrix-primary hover:bg-matrix-primaryHover hover:shadow-[0_0_15px_rgba(0,255,65,0.5)];
+  }
+  .matrix-btn-outline {
+    @apply bg-transparent text-matrix-primary border-matrix-primary hover:bg-matrix-primary hover:text-matrix-bg hover:shadow-[0_0_10px_rgba(0,255,65,0.3)];
+  }
+}

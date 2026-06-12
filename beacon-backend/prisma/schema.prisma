@@ -1,0 +1,123 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Organization {
+  id         String   @id @default(uuid())
+  name       String
+  createdAt  DateTime @default(now())
+  agents     Agent[]
+  users      User[]
+  webhooks   Webhook[]
+  signals    Signal[]
+}
+
+model User {
+  id             String       @id @default(uuid())
+  email          String       @unique
+  passwordHash   String
+  role           Role         @default(OPERATOR)
+  orgId          String
+  org            Organization @relation(fields: [orgId], references: [id])
+  resolutions    Resolution[]
+  createdAt      DateTime     @default(now())
+}
+
+enum Role {
+  ADMIN
+  OPERATOR
+  VIEWER
+}
+
+model Agent {
+  id          String       @id @default(uuid())
+  name        String
+  framework   String
+  apiKey      String       @unique @default(uuid())
+  orgId       String
+  org         Organization @relation(fields: [orgId], references: [id])
+  signals     Signal[]
+  createdAt   DateTime     @default(now())
+  isActive    Boolean      @default(true)
+}
+
+model Signal {
+  id                  String      @id @default(uuid())
+  protocolVersion     String
+  agentId             String
+  agent               Agent       @relation(fields: [agentId], references: [id])
+  orgId               String
+  org                 Organization @relation(fields: [orgId], references: [id])
+  urgency             Urgency
+  confidenceScore     Float?
+  triggerType         String
+  contextSnapshot     Json
+  decisionNeeded      Json
+  timeoutSeconds      Int
+  metadata            Json?
+  status              SignalStatus @default(PENDING)
+  receivedAt          DateTime    @default(now())
+  expiresAt           DateTime
+  resolution          Resolution?
+  notificationsSent   Notification[]
+}
+
+enum Urgency {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum SignalStatus {
+  PENDING
+  ACKNOWLEDGED
+  RESOLVED
+  TIMED_OUT
+  CANCELLED
+}
+
+model Resolution {
+  id               String     @id @default(uuid())
+  signalId         String     @unique
+  signal           Signal     @relation(fields: [signalId], references: [id])
+  resolution       String
+  chosenOptionId   String?
+  instructions     String?
+  resolvedById     String?
+  resolvedBy       User?      @relation(fields: [resolvedById], references: [id])
+  resolvedAt       DateTime   @default(now())
+  resolutionTimeMs Int
+}
+
+model Webhook {
+  id        String       @id @default(uuid())
+  orgId     String
+  org       Organization @relation(fields: [orgId], references: [id])
+  type      WebhookType
+  config    Json         
+  isActive  Boolean      @default(true)
+  createdAt DateTime     @default(now())
+}
+
+enum WebhookType {
+  SLACK
+  EMAIL
+  GENERIC_WEBHOOK
+  PAGERDUTY
+}
+
+model Notification {
+  id          String   @id @default(uuid())
+  signalId    String
+  signal      Signal   @relation(fields: [signalId], references: [id])
+  channel     String
+  status      String   
+  sentAt      DateTime?
+  error       String?
+}
