@@ -2,6 +2,7 @@
   <h1>🚨 BEACON Protocol</h1>
   <p><b>Breakpoint Execution And Contextual Oversight Network</b></p>
   
+  [![Build Status](https://img.shields.io/github/actions/workflow/status/saketrama-v/beacon-protocol/ci.yml?branch=main&style=for-the-badge)](https://github.com/saketrama-v/beacon-protocol/actions)
   [![PyPI - Version](https://img.shields.io/pypi/v/beacon-protocol-sdk?color=blue&style=for-the-badge)](https://pypi.org/project/beacon-protocol-sdk/)
   [![Node.js](https://img.shields.io/badge/Node.js-18+-success?style=for-the-badge&logo=nodedotjs)](https://nodejs.org)
   [![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://reactjs.org/)
@@ -15,13 +16,17 @@
 
 When an AI Agent detects it is about to violate a policy or take an irreversible action, the BEACON Protocol physically **pauses** the agent's execution, captures its entire context (memory, plan, targeted data), and pages a human operator via the real-time BEACON Dashboard. The human can review the exact context and decide whether to **Approve**, **Abort**, or **Modify** the action.
 
+> [!CAUTION]
+> **The Cooperative Safety Caveat**
+> BEACON is a cooperative safety layer, not a hard execution sandbox or hypervisor kill-switch. It relies on the agent invoking the SDK tool when it encounters an ambiguous policy boundary. If a deeply compromised LLM explicitly decides to skip tool invocation and execute rogue code directly, BEACON cannot intercept it. BEACON does not substitute for strict infrastructure sandboxing (e.g., Docker/gVisor).
+
 ---
 
 ## ✨ Core Features
 - **⏸️ Execution Freezing:** Instantly halt LangChain, CrewAI, or AutoGen execution threads.
 - **⚡ Live WebSockets:** Real-time bi-directional SOS broadcasting to a central dashboard.
 - **🏢 Multi-Tenant:** JIT (Just-In-Time) provisioning isolates organizations and API Keys.
-- **🛡️ Fail-Closed SLA Failsafes:** If a human does not respond within a specific timeout, the protocol forces the AI to securely abort the action.
+- **🛡️ Fail-Closed SLA Failsafes:** If a human does not respond within a specific timeout, the protocol forces the AI to securely abort the action. (Verify the logic in [`timeout.job.ts`](file:///beacon-backend/src/jobs/timeout.job.ts) and our test suites).
 
 ---
 
