@@ -66,3 +66,6 @@ logs/
 
 # Vite
 .vite/
+
+# Internal Planning Docs
+docs/
