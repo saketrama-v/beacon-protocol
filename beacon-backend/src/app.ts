@@ -8,14 +8,12 @@ app.use(helmet());
 app.use(cors({ origin: process.env.CORS_ORIGIN || '*' }));
 app.use(express.json());
 
-import authRoutes from './api/routes/auth';
 import agentsRoutes from './api/routes/agents';
 import signalsRoutes from './api/routes/signals';
 import resolutionsRoutes from './api/routes/resolutions';
 import webhooksRoutes from './api/routes/webhooks';
 import dashboardRoutes from './api/routes/dashboard';
 
-app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/agents', agentsRoutes);
 app.use('/api/v1/signals', signalsRoutes);
 app.use('/api/v1/resolutions', resolutionsRoutes);

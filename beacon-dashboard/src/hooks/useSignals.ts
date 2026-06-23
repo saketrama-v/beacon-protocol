@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { io, Socket } from 'socket.io-client';
-import { useAuthStore } from '@/store/auth.store';
+import { useAuth } from '@clerk/clerk-react';
 import { useSignalStore } from '@/store/signal.store';
 import axios from 'axios';
 
@@ -9,15 +9,16 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api/v1';
 let socket: Socket | null = null;
 
 export const useSignals = () => {
-  const { token } = useAuthStore();
+  const { getToken, isLoaded, isSignedIn } = useAuth();
   const { signals, setSignals, addSignal, updateSignal } = useSignalStore();
 
   useEffect(() => {
-    if (!token) return;
+    if (!isLoaded || !isSignedIn) return;
 
     // Fetch initial list
     const fetchSignals = async () => {
       try {
+        const token = await getToken();
         const res = await axios.get(`${API_URL}/dashboard/signals`, {
           headers: { Authorization: `Bearer ${token}` }
         });
@@ -29,24 +30,27 @@ export const useSignals = () => {
 
     fetchSignals();
 
-    // Setup Socket.io
-    const SOCKET_URL = API_URL.replace('/api/v1', '');
-    socket = io(SOCKET_URL, {
-      auth: { token }
-    });
+    // We need to fetch the token for the socket connection
+    getToken().then(token => {
+      if (!token) return;
+      const SOCKET_URL = API_URL.replace('/api/v1', '');
+      socket = io(SOCKET_URL, {
+        auth: { token }
+      });
 
-    socket.on('connect', () => {
-      console.log('Connected to BEACON real-time stream');
-    });
+      socket.on('connect', () => {
+        console.log('Connected to BEACON real-time stream');
+      });
 
-    socket.on('signal:new', (newSignal) => {
-      addSignal(newSignal);
-    });
+      socket.on('signal:new', (newSignal) => {
+        addSignal(newSignal);
+      });
 
-    socket.on('signal:resolved', ({ signalId, resolution, status }) => {
-      updateSignal(signalId, { 
-        status: status || 'RESOLVED', 
-        resolution 
+      socket.on('signal:resolved', ({ signalId, resolution, status }) => {
+        updateSignal(signalId, { 
+          status: status || 'RESOLVED', 
+          resolution 
+        });
       });
     });
 
@@ -55,10 +59,11 @@ export const useSignals = () => {
         socket.disconnect();
       }
     };
-  }, [token, setSignals, addSignal, updateSignal]);
+  }, [isLoaded, isSignedIn, setSignals, addSignal, updateSignal, getToken]);
 
   const resolveSignal = async (signalId: string, chosenOptionId: string, resolutionText: string) => {
     try {
+      const token = await getToken();
       await axios.post(`${API_URL}/resolutions/${signalId}`, {
         resolution: resolutionText,
         chosenOptionId

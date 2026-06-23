@@ -20,7 +20,7 @@ model Organization {
 model User {
   id             String       @id @default(uuid())
   email          String       @unique
-  passwordHash   String
+  passwordHash   String?
   role           Role         @default(OPERATOR)
   orgId          String
   org            Organization @relation(fields: [orgId], references: [id])

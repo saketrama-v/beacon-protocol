@@ -16,21 +16,73 @@ The protocol is split into 4 resilient components:
 
 ---
 
-## 🚀 Getting Started (Production & Local)
+### 🏗️ 2. Core Architecture
+- **Backend**: Node.js, Express, Prisma (PostgreSQL), Redis.
+- **Frontend**: React (Vite), Framer Motion, TailwindCSS, Clerk Auth.
+- **Communication**: REST API + WebSockets for real-time SOS broadcasting.
+- **Security**: 
+  - **Identity**: @clerk/clerk-sdk-node validates cryptographically signed JWTs via remote JWKS.
+  - **Multitenancy**: JIT (Just-In-Time) provisioning automatically isolates new users into distinct Organizations with unique `API Keys`.
 
-The entire infrastructure has been containerized for a flawless 1-click boot sequence.
+---
 
-### Prerequisites
+## 🚀 Local Development Setup
+
+### 1. Prerequisites
 - Docker & Docker Compose
+- Node.js v18+
+- Python 3.9+
+- A free account at [Clerk.com](https://clerk.com) for authentication.
 
-### 1-Click Spin Up
-1. Navigate to the root directory.
-2. Run the following command to spin up PostgreSQL, Redis, the Node API, and the React Dashboard:
-   ```bash
-   docker-compose up --build -d
-   ```
-3. Open your browser and navigate to the dashboard (default port `8080` if using docker, or `5173` if running locally via Vite).
-4. **Login:** `neo@matrix.com` / `password123`
+### 2. Environment Configuration
+
+You must create `.env` files in both the dashboard and backend directories.
+
+**`beacon-dashboard/.env`**:
+```env
+VITE_API_URL=http://localhost:3001/api/v1
+VITE_WS_URL=http://localhost:3001
+VITE_CLERK_PUBLISHABLE_KEY=pk_test_... # Get this from Clerk Dashboard
+```
+
+**`beacon-backend/.env`**:
+```env
+PORT=3001
+DATABASE_URL="postgresql://beacon_user:beacon_password@localhost:5432/beacon?schema=public"
+REDIS_URL="redis://localhost:6379"
+CLERK_SECRET_KEY=sk_test_... # Get this from Clerk Dashboard
+CORS_ORIGIN="http://localhost:5173"
+```
+
+### 3. Start the Infrastructure (Database & Cache)
+```bash
+docker-compose up -d
+```
+
+### 4. Boot the Services
+Open two separate terminals:
+
+**Terminal 1: Backend**
+```bash
+cd beacon-backend
+npm install
+npx prisma db push
+npm run dev
+```
+
+**Terminal 2: Dashboard**
+```bash
+cd beacon-dashboard
+npm install
+npm run dev
+```
+
+### 5. Multitenant Testing
+1. Open `http://localhost:5173` and register a new account via Clerk.
+2. The backend will intercept your first login, dynamically provision an **Organization** for you, and generate a **Default Agent**.
+3. Navigate to the **Settings** page in the dashboard and click to copy your **API Key**.
+4. Open `beacon-agent-example/main.py` and replace the `api_key="..."` field with your copied API Key.
+5. Run the Python agent (`python main.py`) to trigger an anomaly that routes securely and exclusively to your dashboard!
 
 ---
 

@@ -8,13 +8,14 @@ from beacon_sdk.client import BeaconClient
 from beacon_sdk.models import BeaconClientConfig
 from beacon_sdk.adapters.langchain import BeaconLangChainTool
 
+
 def main():
     print("Initializing Python Data Agent...")
     
     # 1. Initialize BEACON Client
     config = BeaconClientConfig(
         api_url="http://localhost:3001/api/v1",
-        api_key="beac_test_key_123", # Seeded API key
+        api_key="0d0366d0-ada7-48cf-b63c-74ca2ab7ba25", # Seeded API key
         agent_id="py_agent_001",
         agent_name="Python-Data-Scraper",
         agent_framework="langchain",
