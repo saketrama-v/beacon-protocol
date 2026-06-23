@@ -86,6 +86,31 @@ tools = [ask_human_tool, search_tool, database_tool]
 # The LLM will now autonomously call `ask_human_for_help` when it gets stuck!
 ```
 
+### Node.js / TypeScript Agents
+
+**1. Install the SDK**
+```bash
+npm install beacon-protocol-sdk
+```
+
+**2. Initialize and bind to your agent:**
+```typescript
+import { BeaconClient } from 'beacon-protocol-sdk';
+import { BeaconLangChainTool } from 'beacon-protocol-sdk/adapters/langchain';
+
+const client = new BeaconClient({
+  apiUrl: 'https://beacon-backend-qloq.onrender.com/api/v1',
+  apiKey: 'your_api_key', // Get this from your BEACON Dashboard
+  agentId: 'node_agent_1',
+  agentName: 'NodeGPT',
+  agentFramework: 'langchain',
+  tenantId: 'default'
+});
+
+const askHumanTool = new BeaconLangChainTool(client);
+const tools = [askHumanTool];
+```
+
 ---
 
 ## 🚀 Local Development Setup
