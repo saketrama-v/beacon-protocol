@@ -2,13 +2,21 @@ import Queue from 'bull';
 import { processTimeoutJob } from '../jobs/timeout.job';
 import { processNotificationJob } from '../jobs/notification.job';
 
-const REDIS_URL = process.env.REDIS_URL || 'redis://localhost:6379';
+const REDIS_URL = process.env.REDIS_URL;
 
-export const timeoutQueue = new Queue('signal-timeouts', REDIS_URL);
-export const notificationQueue = new Queue('notifications', REDIS_URL);
+const mockQueue = {
+  add: async () => console.warn('[Queue] REDIS_URL not set. Skipping job.'),
+  getJob: async () => null,
+  process: () => {},
+} as unknown as Queue.Queue;
 
-// Register Processors
-timeoutQueue.process(processTimeoutJob);
-notificationQueue.process(processNotificationJob);
+export const timeoutQueue = REDIS_URL ? new Queue('signal-timeouts', REDIS_URL) : mockQueue;
+export const notificationQueue = REDIS_URL ? new Queue('notifications', REDIS_URL) : mockQueue;
 
-console.log('Queues initialized');
+if (REDIS_URL) {
+  timeoutQueue.process(processTimeoutJob);
+  notificationQueue.process(processNotificationJob);
+  console.log('Queues initialized with Redis');
+} else {
+  console.warn('WARNING: REDIS_URL not provided. Queue functionality (timeouts) is disabled.');
+}
