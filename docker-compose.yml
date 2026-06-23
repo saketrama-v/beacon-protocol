@@ -16,6 +16,30 @@ services:
     container_name: beacon_redis
     ports:
       - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  backend:
+    build: ./beacon-backend
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/beacon_protocol
+      - REDIS_URL=redis://redis:6379
+      - JWT_SECRET=super_secret_jwt_key_for_dev
+      - CORS_ORIGIN=http://localhost:5173,http://localhost:80
+    depends_on:
+      - postgres
+      - redis
+
+  dashboard:
+    build: ./beacon-dashboard
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
 
 volumes:
   beacon_pgdata:
+  redis_data:
