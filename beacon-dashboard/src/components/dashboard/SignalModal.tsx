@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 export const SignalModal = ({ signal, isOpen, onClose }: { signal: any, isOpen: boolean, onClose: () => void }) => {
   const { resolveSignal } = useSignals();
   const [loading, setLoading] = useState(false);
-  const [resolutionText, setResolutionText] = useState('');
+  const resolutionText = '';
 
   const decisionNeeded = signal.decisionNeeded || {};
 

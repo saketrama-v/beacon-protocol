@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { UserButton, useUser } from '@clerk/clerk-react';
-import { ShieldAlert, LayoutDashboard, Settings, Activity } from 'lucide-react';
-import { ReactNode } from 'react';
+import { ShieldAlert, LayoutDashboard, Settings } from 'lucide-react';
+import type { ReactNode } from 'react';
 import { motion } from 'framer-motion';
 
 export const AppLayout = ({ children }: { children: ReactNode }) => {
