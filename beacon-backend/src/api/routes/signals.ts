@@ -52,13 +52,13 @@ router.post('/', requireAgentAuth, async (req: Request, res: Response): Promise<
 
     const signal = await prisma.signal.create({
       data: {
-        id: packet.signal_id,
-        protocolVersion: packet.protocol_version,
+        id: String(packet.signal_id),
+        protocolVersion: String(packet.protocol_version),
         agentId: agent.id,
         orgId: agent.orgId,
         urgency: urgency as import('@prisma/client').Urgency,
-        confidenceScore: packet.confidence_score,
-        triggerType: packet.trigger_type,
+        confidenceScore: packet.confidence_score ? Number(packet.confidence_score) : null,
+        triggerType: String(packet.trigger_type),
         contextSnapshot: packet.context_snapshot as any,
         decisionNeeded: packet.decision_needed as any,
         timeoutSeconds,
