@@ -10,8 +10,10 @@ const mockQueue = {
   process: () => {},
 } as unknown as Queue.Queue;
 
-export const timeoutQueue = REDIS_URL ? new Queue('signal-timeouts', REDIS_URL) : mockQueue;
-export const notificationQueue = REDIS_URL ? new Queue('notifications', REDIS_URL) : mockQueue;
+const queueOpts = REDIS_URL?.startsWith('rediss://') ? { redis: { tls: { rejectUnauthorized: false } } } : {};
+
+export const timeoutQueue = REDIS_URL ? new Queue('signal-timeouts', REDIS_URL, queueOpts) : mockQueue;
+export const notificationQueue = REDIS_URL ? new Queue('notifications', REDIS_URL, queueOpts) : mockQueue;
 
 if (REDIS_URL) {
   timeoutQueue.process(processTimeoutJob);

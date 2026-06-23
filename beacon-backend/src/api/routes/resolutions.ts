@@ -54,10 +54,6 @@ router.post('/:signalId', async (req: AuthRequest, res: Response): Promise<void>
       return { updatedSignal, resRecord };
     });
 
-    // Cancel timeout job
-    const job = await timeoutQueue.getJob(`timeout_${signalId}`);
-    if (job) await job.remove();
-
     // Emit resolution to Agent (via ws) and Dashboard
     emitToOrg(orgId, 'signal:resolved', {
       signalId,

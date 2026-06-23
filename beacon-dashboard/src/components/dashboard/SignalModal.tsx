@@ -15,8 +15,9 @@ export const SignalModal = ({ signal, isOpen, onClose }: { signal: any, isOpen: 
     try {
       await resolveSignal(signal.id, optionId, resolutionText || 'Resolved via Dashboard');
       onClose();
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
+      alert('Error: ' + (err?.response?.data?.error || err.message || 'Unknown error'));
     } finally {
       setLoading(false);
     }
