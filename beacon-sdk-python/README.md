@@ -5,10 +5,10 @@ The official Python SDK for the BEACON Protocol, allowing autonomous AI agents t
 ## Installation
 
 ```bash
-pip install .
+pip install beacon-protocol-sdk
 ```
 
 For LangChain support:
 ```bash
-pip install .[langchain]
+pip install beacon-protocol-sdk[langchain]
 ```
