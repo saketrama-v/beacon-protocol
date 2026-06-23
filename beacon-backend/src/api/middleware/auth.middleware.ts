@@ -21,8 +21,8 @@ export const requireAuth = async (req: Request, res: Response, next: NextFunctio
     
     // Cryptographically verify the JWT against Clerk's JWKS
     const decoded = await verifyToken(token, {
-      secretKey: process.env.CLERK_SECRET_KEY
-    });
+      secretKey: process.env.CLERK_SECRET_KEY as string
+    } as any);
     
     const clerkId = decoded.sub;
 

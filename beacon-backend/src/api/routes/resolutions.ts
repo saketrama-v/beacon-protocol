@@ -46,7 +46,7 @@ router.post('/:signalId', async (req: AuthRequest, res: Response): Promise<void>
           resolution,
           chosenOptionId,
           instructions,
-          resolvedById: req.user!.userId,
+          resolvedById: req.user!.id,
           resolutionTimeMs: new Date().getTime() - signal.receivedAt.getTime()
         }
       });

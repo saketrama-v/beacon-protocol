@@ -34,7 +34,7 @@ const requireAgentAuth = async (req: Request, res: Response, next: Function) => 
 router.post('/', requireAgentAuth, async (req: Request, res: Response): Promise<void> => {
   try {
     const agent = (req as any).agent;
-    const packet = req.body;
+    const packet: any = req.body;
 
     const isValid = validateSosPacket(packet);
     if (!isValid) {
@@ -46,7 +46,7 @@ router.post('/', requireAgentAuth, async (req: Request, res: Response): Promise<
     const urgency = calculateUrgency(packet);
 
     // Calculate expiration
-    const timeoutSeconds = packet.timeout_seconds || 300;
+    const timeoutSeconds = Number(packet.timeout_seconds) || 300;
     const receivedAt = new Date();
     const expiresAt = new Date(receivedAt.getTime() + timeoutSeconds * 1000);
 
