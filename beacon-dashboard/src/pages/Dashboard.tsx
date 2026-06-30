@@ -61,62 +61,68 @@ export const Dashboard = () => {
       initial="hidden"
       animate="show"
     >
-      <div>
-        <motion.h2 variants={itemVariants} className="text-3xl font-bold tracking-tight text-matrix-primary mb-2 font-mono uppercase">
+      <div className="relative">
+        <motion.h2 variants={itemVariants} className="text-4xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-matrix-text to-matrix-primary mb-2 font-space uppercase drop-shadow-[0_0_15px_rgba(16,185,129,0.5)]">
           System Overview
         </motion.h2>
-        <motion.p variants={itemVariants} className="text-matrix-text opacity-70 font-mono">
-          Monitoring live agent anomalies and interventions.
+        <motion.p variants={itemVariants} className="text-matrix-text/70">
+          Monitoring live autonomous anomalies and global operator interventions.
         </motion.p>
       </div>
 
       <motion.div variants={itemVariants} className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        <Card className="glass-panel border-matrix-border hover:border-matrix-primary hover:shadow-[0_0_15px_rgba(0,255,65,0.2)] transition-all duration-300">
+        <Card className="glass-panel group hover:border-matrix-primary hover:shadow-[0_0_30px_rgba(16,185,129,0.15)] transition-all duration-500 hover:-translate-y-1">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-matrix-text font-mono uppercase tracking-wider">Active Agents</CardTitle>
-            <Activity className="h-4 w-4 text-matrix-primary" />
+            <CardTitle className="text-sm font-medium text-matrix-text/80 font-space uppercase tracking-widest group-hover:text-matrix-primary transition-colors">Active Agents</CardTitle>
+            <Activity className="h-5 w-5 text-matrix-primary group-hover:scale-110 transition-transform" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-matrix-primary font-mono">{stats.activeAgents}</div>
+            <div className="text-4xl font-bold text-white drop-shadow-[0_0_10px_rgba(16,185,129,0.8)]">{stats.activeAgents}</div>
           </CardContent>
         </Card>
 
-        <Card className="glass-panel border-matrix-border hover:border-yellow-500 hover:shadow-[0_0_15px_rgba(234,179,8,0.2)] transition-all duration-300">
+        <Card className="glass-panel group hover:border-yellow-500 hover:shadow-[0_0_30px_rgba(234,179,8,0.15)] transition-all duration-500 hover:-translate-y-1">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-matrix-text font-mono uppercase tracking-wider">Pending Interventions</CardTitle>
-            <AlertTriangle className="h-4 w-4 text-yellow-500 animate-pulse-fast" />
+            <CardTitle className="text-sm font-medium text-matrix-text/80 font-space uppercase tracking-widest group-hover:text-yellow-500 transition-colors">Pending Interventions</CardTitle>
+            <AlertTriangle className="h-5 w-5 text-yellow-500 animate-pulse-fast drop-shadow-[0_0_8px_rgba(234,179,8,0.8)]" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-yellow-500 font-mono">{stats.pendingSignals}</div>
+            <div className="text-4xl font-bold text-white drop-shadow-[0_0_10px_rgba(234,179,8,0.8)]">{stats.pendingSignals}</div>
           </CardContent>
         </Card>
 
-        <Card className="glass-panel border-matrix-border hover:border-red-500 hover:shadow-[0_0_15px_rgba(239,68,68,0.2)] transition-all duration-300">
+        <Card className="glass-panel group hover:border-red-500 hover:shadow-[0_0_30px_rgba(239,68,68,0.15)] transition-all duration-500 hover:-translate-y-1">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-matrix-text font-mono uppercase tracking-wider">Timed Out</CardTitle>
-            <Clock className="h-4 w-4 text-red-500" />
+            <CardTitle className="text-sm font-medium text-matrix-text/80 font-space uppercase tracking-widest group-hover:text-red-500 transition-colors">Timed Out</CardTitle>
+            <Clock className="h-5 w-5 text-red-500 group-hover:scale-110 transition-transform" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-red-500 font-mono">{stats.timedOutSignals}</div>
+            <div className="text-4xl font-bold text-white drop-shadow-[0_0_10px_rgba(239,68,68,0.8)]">{stats.timedOutSignals}</div>
           </CardContent>
         </Card>
 
-        <Card className="glass-panel border-matrix-border hover:border-matrix-primary hover:shadow-[0_0_15px_rgba(0,255,65,0.2)] transition-all duration-300">
+        <Card className="glass-panel group hover:border-matrix-primary hover:shadow-[0_0_30px_rgba(16,185,129,0.15)] transition-all duration-500 hover:-translate-y-1">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-matrix-text font-mono uppercase tracking-wider">Total Handled</CardTitle>
-            <CheckCircle className="h-4 w-4 text-matrix-primary" />
+            <CardTitle className="text-sm font-medium text-matrix-text/80 font-space uppercase tracking-widest group-hover:text-matrix-primary transition-colors">Total Handled</CardTitle>
+            <CheckCircle className="h-5 w-5 text-matrix-primary group-hover:scale-110 transition-transform" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-matrix-primary font-mono">{stats.totalSignals}</div>
+            <div className="text-4xl font-bold text-white drop-shadow-[0_0_10px_rgba(16,185,129,0.8)]">{stats.totalSignals}</div>
           </CardContent>
         </Card>
       </motion.div>
 
-      <motion.div variants={itemVariants}>
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-xl font-bold text-matrix-primary font-mono uppercase tracking-wider">Active Anomalies</h3>
+      <motion.div variants={itemVariants} className="pt-6 relative">
+        <div className="absolute top-0 left-0 w-32 h-[1px] bg-gradient-to-r from-matrix-primary to-transparent"></div>
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-2xl font-bold text-matrix-text font-space uppercase tracking-widest flex items-center gap-3">
+            <span className="w-2 h-2 rounded-full bg-matrix-primary animate-ping"></span>
+            Active Anomalies
+          </h3>
         </div>
-        <SignalList />
+        <div className="relative z-10">
+          <SignalList />
+        </div>
       </motion.div>
     </motion.div>
   );

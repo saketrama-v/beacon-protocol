@@ -1,24 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   body {
-    @apply bg-matrix-bg text-matrix-text font-mono antialiased;
+    @apply bg-matrix-bg text-matrix-text antialiased min-h-screen overflow-x-hidden;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6, .font-space {
+    font-family: 'Space Grotesk', sans-serif;
   }
 }
 
 @layer components {
+  /* Premium Glassmorphism */
   .glass-panel {
-    @apply bg-matrix-surface backdrop-blur-md border border-matrix-border rounded-lg shadow-[0_0_15px_rgba(0,255,65,0.1)];
+    @apply bg-glass-gradient backdrop-blur-xl border border-matrix-border rounded-xl shadow-2xl;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   }
+  
+  /* Buttons */
   .matrix-btn {
-    @apply px-4 py-2 rounded font-semibold transition-all duration-200 border;
+    @apply px-5 py-2.5 rounded-lg font-semibold transition-all duration-300 border flex items-center justify-center gap-2;
   }
   .matrix-btn-primary {
-    @apply bg-matrix-primary text-matrix-bg border-matrix-primary hover:bg-matrix-primaryHover hover:shadow-[0_0_15px_rgba(0,255,65,0.5)];
+    @apply bg-matrix-primary text-matrix-bg border-matrix-primary hover:bg-matrix-primaryHover hover:shadow-[0_0_20px_rgba(16,185,129,0.4)] hover:-translate-y-0.5 active:translate-y-0;
   }
   .matrix-btn-outline {
-    @apply bg-transparent text-matrix-primary border-matrix-primary hover:bg-matrix-primary hover:text-matrix-bg hover:shadow-[0_0_10px_rgba(0,255,65,0.3)];
+    @apply bg-transparent text-matrix-primary border-matrix-primary/50 hover:bg-matrix-primary/10 hover:border-matrix-primary hover:shadow-[0_0_15px_rgba(16,185,129,0.2)] hover:-translate-y-0.5 active:translate-y-0;
   }
+}
+
+/* Animated Grid Background */
+.bg-grid {
+  background-size: 32px 32px;
+  background-image: 
+    linear-gradient(to right, rgba(16, 185, 129, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(16, 185, 129, 0.03) 1px, transparent 1px);
+  mask-image: radial-gradient(circle at center, black 30%, transparent 80%);
+  -webkit-mask-image: radial-gradient(circle at center, black 30%, transparent 80%);
 }

@@ -82,7 +82,8 @@ export const AppLayout = ({ children }: { children: ReactNode }) => {
 
       {/* Main Content */}
       <main className="flex-1 overflow-y-auto relative bg-matrix-bg">
-        <div className="absolute inset-0 pointer-events-none bg-matrix-gradient opacity-20 z-0"></div>
+        <div className="absolute inset-0 pointer-events-none bg-matrix-gradient z-0 opacity-80"></div>
+        <div className="absolute inset-0 pointer-events-none bg-grid z-0 opacity-30 animate-grid-scroll"></div>
         <div className="relative z-10 p-8 h-full">
           {children}
         </div>

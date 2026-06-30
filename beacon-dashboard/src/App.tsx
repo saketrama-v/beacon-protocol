@@ -19,8 +19,9 @@ function App() {
               </AppLayout>
             </SignedIn>
             <SignedOut>
-              <div className="flex h-screen w-full items-center justify-center bg-matrix-bg">
-                <div className="absolute inset-0 pointer-events-none bg-matrix-gradient opacity-20"></div>
+              <div className="flex h-screen w-full items-center justify-center bg-matrix-bg relative">
+                <div className="absolute inset-0 pointer-events-none bg-matrix-gradient opacity-80 z-0"></div>
+                <div className="absolute inset-0 pointer-events-none bg-grid opacity-30 animate-grid-scroll z-0"></div>
                 <div className="z-10">
                   <SignIn appearance={{
                     elements: {
