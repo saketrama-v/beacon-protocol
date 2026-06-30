@@ -24,7 +24,7 @@ const beaconClient = new BeaconClient({
   apiUrl: API_URL,
   agentId: "claude-desktop-mcp",
   agentName: "Claude Desktop",
-  agentFramework: "mcp",
+  agentFramework: "custom",
   tenantId: "local-user"
 });
 
