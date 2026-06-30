@@ -48,7 +48,7 @@ export class BeaconClient {
 
     } catch (error: any) {
       console.error('[BEACON] Failed to emit SOS:', error.response?.data || error.message);
-      throw new Error('BEACON Protocol SOS Emission Failed');
+      throw new Error(`BEACON Protocol SOS Emission Failed: ${JSON.stringify(error.response?.data || error.message)}`);
     }
   }
 

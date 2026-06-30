@@ -95,7 +95,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       decision_needed: {
         question: `Agent is blocked: ${reason}`,
         options: options,
-        default_if_timeout: options[0].option_id // Usually abort
+        default_if_timeout: options && options.length > 0 ? options[0].option_id : "abort" // Usually abort
       },
       timeout_seconds: 300 // 5 minutes
     });
@@ -115,7 +115,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       content: [
         {
           type: "text",
-          text: `BEACON Protocol SOS Emission Failed or Timed Out: ${error.message}. YOU MUST ABORT YOUR CURRENT ACTION.`
+          text: `BEACON Protocol SOS Emission Failed: ${error instanceof Error ? error.stack : JSON.stringify(error)}. YOU MUST ABORT YOUR CURRENT ACTION.`
         }
       ]
     };
