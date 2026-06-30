@@ -12,7 +12,7 @@ const originalLog = console.log;
 console.log = (...args) => console.error(...args);
 
 const API_KEY = process.env.BEACON_API_KEY;
-const API_URL = process.env.BEACON_API_URL || "https://beacon-backend-3qio.onrender.com/api/v1";
+const API_URL = process.env.BEACON_API_URL || "https://beacon-backend-qloq.onrender.com/api/v1";
 
 if (!API_KEY) {
   console.error("Error: BEACON_API_KEY environment variable is required.");

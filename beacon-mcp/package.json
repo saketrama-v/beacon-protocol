@@ -1,6 +1,6 @@
 {
   "name": "beacon-mcp-server",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "build/index.js",
   "bin": {
     "beacon-mcp-server": "./build/index.js"
@@ -12,7 +12,12 @@
     "build": "tsc",
     "start": "node build/index.js"
   },
-  "keywords": ["mcp", "beacon", "agents", "human-in-the-loop"],
+  "keywords": [
+    "mcp",
+    "beacon",
+    "agents",
+    "human-in-the-loop"
+  ],
   "author": "Saket Rama",
   "license": "ISC",
   "description": "MCP Server for the Beacon Protocol",
