@@ -4,7 +4,9 @@ import axios from 'axios';
 import { motion } from 'framer-motion';
 import type { Variants } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Key, Copy, CheckCircle2, Shield, Server, Activity } from 'lucide-react';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Key, Copy, CheckCircle2, Shield, Server, Activity, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api/v1';
@@ -26,6 +28,28 @@ export const Settings = () => {
   const { getToken } = useAuth();
   const [agents, setAgents] = useState<any[]>([]);
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
+  
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [newAgentName, setNewAgentName] = useState('');
+  const [newAgentFramework, setNewAgentFramework] = useState('custom');
+
+  const handleCreateAgent = async () => {
+    try {
+      const token = await getToken();
+      if (!token) return;
+      const res = await axios.post(`${API_URL}/agents`, {
+        name: newAgentName,
+        framework: newAgentFramework
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setAgents([res.data, ...agents]);
+      setIsDialogOpen(false);
+      setNewAgentName('');
+    } catch (err) {
+      console.error('Failed to create agent', err);
+    }
+  };
 
   useEffect(() => {
     const fetchAgents = async () => {
@@ -69,14 +93,56 @@ export const Settings = () => {
       <motion.div variants={itemVariants} className="grid gap-8">
         <Card className="glass-panel border-matrix-border bg-black/40 overflow-hidden relative">
           <div className="absolute top-0 left-0 w-full h-1 bg-matrix-gradient opacity-50"></div>
-          <CardHeader>
-            <CardTitle className="text-xl font-medium text-matrix-text font-mono uppercase tracking-wider flex items-center gap-2">
-              <Key className="w-5 h-5 text-matrix-primary" />
-              Agent Connections
-            </CardTitle>
-            <CardDescription className="text-matrix-text opacity-60 font-mono">
-              Use these secure API keys to connect your Python or Node.js agents to your specific dashboard.
-            </CardDescription>
+          <CardHeader className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <CardTitle className="text-xl font-medium text-matrix-text font-mono uppercase tracking-wider flex items-center gap-2">
+                <Key className="w-5 h-5 text-matrix-primary" />
+                Agent Connections
+              </CardTitle>
+              <CardDescription className="text-matrix-text opacity-60 font-mono">
+                Use these secure API keys to connect your Python or Node.js agents to your specific dashboard.
+              </CardDescription>
+            </div>
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+              <DialogTrigger asChild>
+                <Button variant="outline" className="border-matrix-primary/50 text-matrix-primary hover:bg-matrix-primary/10">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Provision Agent
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="bg-black border border-matrix-primary/50 text-matrix-text font-mono">
+                <DialogHeader>
+                  <DialogTitle className="text-matrix-primary uppercase">Provision New Agent</DialogTitle>
+                  <DialogDescription className="opacity-70">
+                    Create a secure API key for a new agent.
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                  <div className="grid gap-2">
+                    <label className="text-sm">Agent Name</label>
+                    <Input 
+                      className="bg-black/50 border-matrix-border focus-visible:ring-matrix-primary text-matrix-text" 
+                      placeholder="e.g. FinanceBot-01" 
+                      value={newAgentName}
+                      onChange={(e) => setNewAgentName(e.target.value)}
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <label className="text-sm">Framework</label>
+                    <Input 
+                      className="bg-black/50 border-matrix-border focus-visible:ring-matrix-primary text-matrix-text" 
+                      placeholder="e.g. mcp, langchain, crewai" 
+                      value={newAgentFramework}
+                      onChange={(e) => setNewAgentFramework(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button variant="outline" onClick={() => setIsDialogOpen(false)} className="border-matrix-border hover:bg-white/10 text-white">Cancel</Button>
+                  <Button onClick={handleCreateAgent} className="bg-matrix-primary text-black hover:bg-matrix-primary/80">Generate API Key</Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </CardHeader>
           <CardContent className="space-y-4">
             {agents.map((agent) => (
