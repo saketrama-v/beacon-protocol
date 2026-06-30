@@ -118,6 +118,31 @@ const tools = [askHumanTool];
 
 ---
 
+## 🖥️ Desktop AI Assistants (MCP Server)
+
+If you are using a commercial desktop AI assistant like **Claude Desktop, Cursor, Antigravity, or Windsurf**, you can plug BEACON into your chat interface instantly using the **Model Context Protocol (MCP)**.
+
+Your desktop AI will automatically trigger a BEACON SOS anomaly whenever it is asked to do something dangerous or irreversible on your computer.
+
+**Just add this to your AI client's MCP configuration file (no installation required!):**
+
+```json
+{
+  "mcpServers": {
+    "beacon-mcp": {
+      "command": "npx",
+      "args": ["-y", "beacon-mcp-server"],
+      "env": {
+        "BEACON_API_KEY": "beac_your_api_key_here",
+        "BEACON_API_URL": "https://your-beacon-backend.onrender.com/api/v1"
+      }
+    }
+  }
+}
+```
+
+---
+
 ## 🚀 Local Development Setup
 
 ### 1. Prerequisites
