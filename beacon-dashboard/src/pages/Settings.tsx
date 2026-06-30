@@ -6,7 +6,7 @@ import type { Variants } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import { Key, Copy, CheckCircle2, Shield, Server, Activity, Plus } from 'lucide-react';
+import { Key, Copy, CheckCircle2, Shield, Server, Activity, Plus, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api/v1';
@@ -54,6 +54,19 @@ export const Settings = () => {
     } catch (err: any) {
       console.error('Failed to create agent', err);
       setErrorMsg(err.response?.data?.error || err.message || 'An unknown error occurred');
+    }
+  };
+
+  const handleDeleteAgent = async (id: string) => {
+    try {
+      const token = await getToken();
+      if (!token) return;
+      await axios.delete(`${API_URL}/agents/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setAgents(agents.filter(agent => agent.id !== id));
+    } catch (err) {
+      console.error('Failed to delete agent', err);
     }
   };
 
@@ -184,6 +197,14 @@ export const Settings = () => {
                     onClick={() => handleCopy(agent.apiKey)}
                   >
                     {copiedKey === agent.apiKey ? <CheckCircle2 className="w-4 h-4 text-matrix-primary" /> : <Copy className="w-4 h-4" />}
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    className="hover:bg-red-500/20 hover:text-red-500 text-matrix-text opacity-50 hover:opacity-100 transition-colors"
+                    onClick={() => handleDeleteAgent(agent.id)}
+                  >
+                    <Trash2 className="w-4 h-4" />
                   </Button>
                 </div>
               </div>
