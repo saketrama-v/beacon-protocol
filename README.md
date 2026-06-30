@@ -131,7 +131,7 @@ Your desktop AI will automatically trigger a BEACON SOS anomaly whenever it is a
   "mcpServers": {
     "beacon-mcp": {
       "command": "npx",
-      "args": ["-y", "beacon-mcp-server"],
+      "args": ["-y", "beacon-mcp-server@latest"],
       "env": {
         "BEACON_API_KEY": "beac_your_api_key_here",
         "BEACON_API_URL": "https://your-beacon-backend.onrender.com/api/v1"
