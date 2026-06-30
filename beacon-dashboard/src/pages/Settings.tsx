@@ -32,11 +32,16 @@ export const Settings = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [newAgentName, setNewAgentName] = useState('');
   const [newAgentFramework, setNewAgentFramework] = useState('custom');
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const handleCreateAgent = async () => {
     try {
+      setErrorMsg(null);
       const token = await getToken();
-      if (!token) return;
+      if (!token) {
+        setErrorMsg('Authentication token missing. Please sign in again.');
+        return;
+      }
       const res = await axios.post(`${API_URL}/agents`, {
         name: newAgentName,
         framework: newAgentFramework
@@ -46,8 +51,9 @@ export const Settings = () => {
       setAgents([res.data, ...agents]);
       setIsDialogOpen(false);
       setNewAgentName('');
-    } catch (err) {
+    } catch (err: any) {
       console.error('Failed to create agent', err);
+      setErrorMsg(err.response?.data?.error || err.message || 'An unknown error occurred');
     }
   };
 
@@ -118,6 +124,11 @@ export const Settings = () => {
                   </DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
+                  {errorMsg && (
+                    <div className="p-3 bg-red-500/10 border border-red-500/50 rounded text-red-500 text-sm font-mono">
+                      {errorMsg}
+                    </div>
+                  )}
                   <div className="grid gap-2">
                     <label className="text-sm">Agent Name</label>
                     <Input 
